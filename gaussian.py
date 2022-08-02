@@ -2,10 +2,9 @@ import cv2
 import numpy as np
 
 
-#######################
 #   WORKING CODE
-#######################
 def gauss_1(img: np.ndarray):
+    # Kernel for Gaussian blurr
     ker = np.array([[1, 2, 1], [2, 4, 2], [1, 2, 1]]) / 16
     b, g, r = cv2.split(img)
     cols = img.shape[0] - 2
@@ -23,9 +22,7 @@ def gauss_1(img: np.ndarray):
     return cv2.merge((tb, tg, tr))
 
 
-#######################
 #   NOT WORKING CODE
-#######################
 def gauss_2(img: np.ndarray):
     ker = np.array([[[1, 2, 1], [2, 4, 2], [1, 2, 1]],
                     [[1, 2, 1], [2, 4, 2], [1, 2, 1]],
