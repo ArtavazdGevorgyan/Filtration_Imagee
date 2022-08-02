@@ -1,4 +1,4 @@
-from PyQt5 import QtWidgets, QtCore
+from PyQt5 import QtWidgets, QtCore, QtGui
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtWidgets import QApplication, QMainWindow, QMenuBar, QMenu, QFileDialog, QMessageBox
 import sys
@@ -16,40 +16,43 @@ except FileExistsError:
 class Window(QMainWindow):
     def __init__(self):
         super(Window, self).__init__()
-        self.setWindowTitle("Photoshop")
-        self.setGeometry(100, 100, 800, 600)
+        self.setWindowTitle("Photo Editor")
+        self.setGeometry(100, 100, 0, 0)
+        self.setFixedSize(800, 600)
         self.createMenuBar()
         self.setStyleSheet("background-color:#333333")
         self.img_label = QtWidgets.QLabel(self)
-        self.img_label.setGeometry(10, 100, 0, 0)
-
+        self.img_label.setGeometry(10, 80, 780, 500)
+        self.img_label.setText("Import an image")
+        self.img_label.setStyleSheet("background-color:#5C5C5C; border-radius: 2; color: #333333; font-size: 30pt")
+        self.img_label.setAlignment(QtCore.Qt.AlignCenter)
         self.btn_blw = QtWidgets.QPushButton("Monochrome", self)
         self.btn_blw.setGeometry(10, 20, 120, 40)
         self.btn_blw.setStyleSheet("border-radius: 5; background-color: #5C5C5C ")
         self.btn_blw.setContentsMargins(5, 5, 5, 5)
         self.btn_blw.clicked.connect(self.clicked_btn)
         self.btn_retro = QtWidgets.QPushButton("Retro", self)
-        self.btn_retro.setGeometry(140, 20, 120, 40)
+        self.btn_retro.setGeometry(142, 20, 120, 40)
         self.btn_retro.setStyleSheet("border-radius: 5; background-color: #5C5C5C ")
         self.btn_retro.setContentsMargins(5, 5, 5, 5)
         self.btn_retro.clicked.connect(self.clicked_btn)
         self.btn_contrast = QtWidgets.QPushButton("Contrast", self)
-        self.btn_contrast.setGeometry(270, 20, 120, 40)
+        self.btn_contrast.setGeometry(274, 20, 120, 40)
         self.btn_contrast.setStyleSheet("border-radius: 5; background-color: #5C5C5C ")
         self.btn_contrast.setContentsMargins(5, 5, 5, 5)
         self.btn_contrast.clicked.connect(self.clicked_btn)
         self.btn_saturation = QtWidgets.QPushButton("Saturation", self)
-        self.btn_saturation.setGeometry(400, 20, 120, 40)
+        self.btn_saturation.setGeometry(406, 20, 120, 40)
         self.btn_saturation.setStyleSheet("border-radius: 5; background-color: #5C5C5C ")
         self.btn_saturation.setContentsMargins(5, 5, 5, 5)
         self.btn_saturation.clicked.connect(self.clicked_btn)
         self.btn_blurr = QtWidgets.QPushButton("Blurr", self)
-        self.btn_blurr.setGeometry(530, 20, 120, 40)
+        self.btn_blurr.setGeometry(538, 20, 120, 40)
         self.btn_blurr.setStyleSheet("border-radius: 5; background-color: #5C5C5C ")
         self.btn_blurr.setContentsMargins(5, 5, 5, 5)
         self.btn_blurr.clicked.connect(self.clicked_btn)
         self.btn_undo = QtWidgets.QPushButton("Undo", self)
-        self.btn_undo.setGeometry(660, 20, 120, 40)
+        self.btn_undo.setGeometry(670, 20, 120, 40)
         self.btn_undo.setStyleSheet("border-radius: 5; background-color: #5C5C5C ")
         self.btn_undo.setContentsMargins(5, 5, 5, 5)
         self.btn_undo.clicked.connect(self.clicked_btn)
@@ -75,8 +78,7 @@ class Window(QMainWindow):
     def open_img(self, path):
         self.final_img = cv2.imread(path)
         pixmap = QPixmap(path)
-        pixmap_resized = pixmap.scaled(720, 600, QtCore.Qt.KeepAspectRatio)
-        self.img_label.resize(pixmap_resized.width(), pixmap_resized.height())
+        pixmap_resized = pixmap.scaled(780, 500, QtCore.Qt.KeepAspectRatio)
         self.img_label.setAlignment(QtCore.Qt.AlignCenter)
         self.img_label.setPixmap(pixmap_resized)
 
@@ -151,6 +153,8 @@ def application():
     app = QApplication(sys.argv)
     window = Window()
 
+    path = os.path.join(os.path.dirname(sys.modules[__name__].__file__), "logo/logo.png")
+    app.setWindowIcon(QtGui.QIcon(path))
     window.show()
     sys.exit(app.exec_())
 
