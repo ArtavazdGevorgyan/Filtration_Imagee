@@ -6,6 +6,7 @@ import cv2
 import os
 import shutil
 import filters
+import resources
 
 try:
     os.mkdir(".cache")
@@ -16,11 +17,21 @@ except FileExistsError:
 class Window(QMainWindow):
     def __init__(self):
         super(Window, self).__init__()
+        # Window setup and styling
         self.setWindowTitle("Photo Editor")
         self.setGeometry(100, 100, 0, 0)
         self.setFixedSize(800, 600)
-        self.createMenuBar()
         self.setStyleSheet("background-color:#333333")
+
+        # Creating MenuBar
+        self.menuBar = QMenuBar(self)
+        self.setMenuBar(self.menuBar)
+        fileMenu = QMenu("&File", self)
+        self.menuBar.addMenu(fileMenu)
+        fileMenu.addAction("Open", self.menu_action_clicked)
+        fileMenu.addAction("Save", self.menu_action_clicked)
+
+        # Window widgets setup and styling
         self.img_label = QtWidgets.QLabel(self)
         self.img_label.setGeometry(10, 80, 780, 500)
         self.img_label.setText("Import an image")
@@ -59,21 +70,14 @@ class Window(QMainWindow):
         self.final_img = None
         self.img = None
         self.fname = None
+
+        # Error box
         self.error = QMessageBox()
         self.error.setWindowTitle("Error")
         self.error.setIcon(QMessageBox.Warning)
+
         # Action when you close Program
         self.setAttribute(QtCore.Qt.WA_DeleteOnClose, True)
-
-    def createMenuBar(self):
-        self.menuBar = QMenuBar(self)
-        self.setMenuBar(self.menuBar)
-
-        fileMenu = QMenu("&File", self)
-        self.menuBar.addMenu(fileMenu)
-
-        fileMenu.addAction("Open", self.menu_action_clicked)
-        fileMenu.addAction("Save", self.menu_action_clicked)
 
     def open_img(self, path):
         self.final_img = cv2.imread(path)
@@ -138,8 +142,9 @@ class Window(QMainWindow):
                     cv2.imwrite('.cache/blurr.jpg', img)
                     self.open_img('.cache/blurr.jpg')
                 case "Undo":
-                    self.open_img(self.fname)
-        except:
+                    if not self.final_img is None:
+                        self.open_img(self.fname)
+        except (ValueError, AttributeError, cv2.error):
             self.error.setText("File is not opened       ")
             self.error.setInformativeText("Open the file: File > Open")
             self.error.exec_()
@@ -153,7 +158,7 @@ def application():
     app = QApplication(sys.argv)
     window = Window()
 
-    path = os.path.join(os.path.dirname(sys.modules[__name__].__file__), "logo/logo.png")
+    path = ":/icons/logo.png"
     app.setWindowIcon(QtGui.QIcon(path))
     window.show()
     sys.exit(app.exec_())
