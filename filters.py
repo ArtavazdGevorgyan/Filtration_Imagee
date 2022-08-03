@@ -45,8 +45,8 @@ def saturation(img: np.ndarray):
     sat = 2
     hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
     h, s, v = cv2.split(hsv)
+    s[s > max_val/sat] = max_val
     s *= sat
-    s[s > max_val] = max_val
     return cv2.cvtColor(cv2.merge((h, s, v)), cv2.COLOR_HSV2BGR)
 
 
