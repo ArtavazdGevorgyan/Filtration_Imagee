@@ -29,7 +29,7 @@ def retro(img: np.ndarray):
 # CONTRAST
 def contrast(img: np.ndarray):
     # Increasing contrast by value
-    value = 30
+    value = 20
     final_img = img.copy()
     final_img[final_img < value] = 0
     final_img[(final_img >= value) & (final_img <= mid_val)] -= value
