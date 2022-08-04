@@ -114,7 +114,7 @@ class Window(QMainWindow):
                     pass
                 else:
                     self.error.setText(" Not valid file name                ")
-                    self.error.setInformativeText("Use .png, .jpg or .jpeg extentions\nFile name example: exampl.png")
+                    self.error.setInformativeText("Use .png, .jpg or .jpeg extentions\nFile name example: example.png")
                     self.error.exec_()
 
     def clicked_btn(self):
